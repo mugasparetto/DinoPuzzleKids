@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>B6B21D7D-2897-46A1-8ED7-A5964DEBAE08</string>
+	<key>IDESourceControlProjectName</key>
+	<string>DinoPuzzleKids</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>8D38096C28450D3FAD7CAD2A6A7E66A9BF2BB46A</key>
+		<string>https://github.com/mugasparetto/DinoPuzzleKids.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>DinoPuzzleKids.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>8D38096C28450D3FAD7CAD2A6A7E66A9BF2BB46A</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/mugasparetto/DinoPuzzleKids.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>8D38096C28450D3FAD7CAD2A6A7E66A9BF2BB46A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8D38096C28450D3FAD7CAD2A6A7E66A9BF2BB46A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>DinoPuzzleKids</string>
+		</dict>
+	</array>
+</dict>
+</plist>

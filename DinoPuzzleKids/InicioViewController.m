@@ -62,6 +62,10 @@
     [background stop];
 }
 
+- (NSUInteger)supportedInterfaceOrientations{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
 /*
 #pragma mark - Navigation
 
