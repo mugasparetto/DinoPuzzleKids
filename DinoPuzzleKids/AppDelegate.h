@@ -1,8 +1,8 @@
 //
 //  AppDelegate.h
-//  DinoPuzzleKids
+//  TesteImagemBotoes
 //
-//  Created by Murilo Gasparetto on 24/04/15.
+//  Created by Murilo Gasparetto on 20/03/15.
 //  Copyright (c) 2015 Murilo Gasparetto. All rights reserved.
 //
 
@@ -11,6 +11,8 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+
+@property(nonatomic, retain) UINavigationController *navController;
 
 
 @end

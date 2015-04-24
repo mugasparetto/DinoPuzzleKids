@@ -1,12 +1,14 @@
 //
 //  AppDelegate.m
-//  DinoPuzzleKids
+//  TesteImagemBotoes
 //
-//  Created by Murilo Gasparetto on 24/04/15.
+//  Created by Murilo Gasparetto on 20/03/15.
 //  Copyright (c) 2015 Murilo Gasparetto. All rights reserved.
 //
 
 #import "AppDelegate.h"
+#import "ImageViewController.h"
+#import "InicioViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,9 +20,35 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    
+    InicioViewController *invc = [[InicioViewController alloc] init];
+    
+    self.navController = [[UINavigationController alloc]initWithRootViewController:invc];
+    
+    
+    //self.navController.navigationBarHidden = YES;
+    
+    [self.window setRootViewController: self.navController];
+    
+        self.navController.navigationBar.barTintColor = [UIColor redColor];
+    
+    self.navController.navigationBarHidden = YES;
+    
+    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window{
+    NSUInteger orientations = UIInterfaceOrientationMaskAllButUpsideDown;
+    
+    if(self.window.rootViewController){
+        UIViewController *presentedViewController = [[(UINavigationController *)self.window.rootViewController viewControllers] lastObject];
+        orientations = [presentedViewController supportedInterfaceOrientations];
+    }
+    
+    return orientations;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
