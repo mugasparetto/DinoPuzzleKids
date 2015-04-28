@@ -9,12 +9,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import "ImageViewController.h"
-#import "contadorDireita.h"
-#import "contadorEsquerda.h"
-#import "contadorBaixo.h"
-#import "contadorCima.h"
-#import "contadorAngle.h"
-#import "Coordenadas.h"
 
 @interface ImageViewController () <UIScrollViewDelegate>
 
@@ -26,28 +20,24 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *contentView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scroll;
-@property (weak, nonatomic) IBOutlet UIImageView *base2;
-@property (weak, nonatomic) IBOutlet UIImageView *base1;
+
 
 @property (weak, nonatomic) IBOutlet UILabel *score;
 @property (weak, nonatomic) IBOutlet UILabel *pontLabel;
 @property (nonatomic, weak) IBOutlet UIImageView *personagem;
+
 @property (nonatomic) UIImageView *sombra;
+@property (nonatomic) UIImageView *sombra2;
+@property (nonatomic) UIImageView *sombra3;
+
 @property (nonatomic) CGFloat anglo;
 @property CGSize startSize;
 @property CGPoint startPoint;
-@property (weak, nonatomic) IBOutlet UIImageView *bg;
-
-@property (nonatomic) contadorDireita *objetoContadorDireto;
-@property (nonatomic) contadorEsquerda *objetoContadorEsquerda;
-@property (nonatomic) contadorBaixo *objetoContadorBaixo;
-@property (nonatomic) contadorCima *objetoContadorCima;
-@property (nonatomic) contadorAngle *objetoContadorAngle;
-@property (nonatomic) Coordenadas *vetoresCoordenadas;
 
 @property (weak, nonatomic) IBOutlet UIView *areaJogo;
 @property (nonatomic) NSMutableArray *matrizX;
 @property (nonatomic) NSMutableArray *matrizY;
+@property (nonatomic) NSMutableArray *vetorAnglo;
 @property (nonatomic) NSMutableArray *matrizSombraX;
 @property (nonatomic) NSMutableArray *matrizSombraY;
 @property (nonatomic) NSInteger i;
@@ -58,6 +48,7 @@
 @property (nonatomic) float y0;
 @property (nonatomic) int sorteioX;
 @property (nonatomic) int sorteioY;
+@property (nonatomic) int sorteioAng;
 
 @property (nonatomic) NSInteger sorteado;
 @property (nonatomic) int pont;
@@ -74,27 +65,37 @@
     if (self){
         self.anglo = 0;
         _startMusica = 1;
-        self.tabBarItem.title = @"Jogo";
-        UIImage *i = [UIImage imageNamed:@"IconeGame2.png"];
-        self.tabBarItem.image = i;
     }
 
     return self;
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    NSLog(@"%d", self.origem);
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //index dino sorteado
     self.sorteado = 0;
-    self.pont =0 ;
     
+    //pontuação
+    self.pont = 0;
+    
+    //alocando vetores de personagens e sombras
     self.sombras = [[NSMutableArray alloc] init];
     self.imagens = [[NSMutableArray alloc] init];
     
+    //label da pontuação
     [self.score setFont:[UIFont fontWithName:@"foo" size:30]];
     [self.pontLabel setFont:[UIFont fontWithName:@"foo" size:30]];
     [self.pontLabel setText: [NSString stringWithFormat:@"%d", self.pont]];
     
+    //adicionando imagens
     [self.sombras addObject:[UIImage imageNamed:@"sombra_dino1.png"]];
     [self.sombras addObject:[UIImage imageNamed:@"sombra_dino2.png"]];
     [self.sombras addObject:[UIImage imageNamed:@"sombra_dino3.png"]];
@@ -102,24 +103,43 @@
     [self.imagens addObject:[UIImage imageNamed:@"dino2.png"]];
     [self.imagens addObject:[UIImage imageNamed:@"dino3.png"]];
     
+    //setando start size, para corrigir bug ao rotacionar
     self.startSize = self.personagem.frame.size;
-    self.objetoContadorEsquerda = [contadorEsquerda instance];
-    self.objetoContadorDireto = [contadorDireita instance];
-    self.objetoContadorCima = [contadorCima instance];
-    self.objetoContadorBaixo = [contadorBaixo instance];
-    self.objetoContadorAngle = [contadorAngle instance];
-    self.vetoresCoordenadas = [Coordenadas instance];
     
+    
+    //adicionando sombra programaticamente
     self.sombra = [[UIImageView alloc] init];
+    self.sombra2 = [[UIImageView alloc] init];
+    self.sombra3 = [[UIImageView alloc] init];
     self.sombra.layer.anchorPoint = CGPointMake (0.5, 0.5);
+    self.sombra2.layer.anchorPoint = CGPointMake (0.5, 0.5);
+    self.sombra3.layer.anchorPoint = CGPointMake (0.5, 0.5);
     self.personagem.layer.anchorPoint = CGPointMake (0.5, 0.5);
     
-    
+    //método que chama nova sombra e novo personagem
     [self resetImagem];
     
-    [self.view insertSubview:self.sombra belowSubview:self.personagem];
-    // Do any additional setup after loading the view from its nib.
+    //fazendo personagem ficar acima da sombra
+    switch (self.origem){
+        case 0:
+            [self.view insertSubview:self.sombra belowSubview:self.personagem];
+            break;
+            
+        case 1:
+            [self.view insertSubview:self.sombra belowSubview:self.personagem];
+            [self.view insertSubview:self.sombra2 belowSubview:self.personagem];
+            break;
+            
+        case 2:
+            [self.view insertSubview:self.sombra belowSubview:self.personagem];
+            [self.view insertSubview:self.sombra2 belowSubview:self.personagem];
+            [self.view insertSubview:self.sombra3 belowSubview:self.personagem];
+            break;
+    }
     
+    
+
+    //configuracões de som
     NSString *path;
     NSURL *soundUrl;
     
@@ -135,37 +155,22 @@
     encaixou = [[AVAudioPlayer alloc] initWithContentsOfURL:soundUrl error:nil];
     [encaixou setDelegate:self];
     encaixou.numberOfLoops = 0;
-
-    [self.viewAlert setHidden:YES];
     
+
+    //property que impede entrar em didLayoutSubviews
     self.resetou = YES;
     
-    
-}
-
-- (void) viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    if (self.vetoresCoordenadas.resetou){
-        self.anglo = 0;
-        self.personagem.transform = CGAffineTransformMakeRotation(self.anglo);
-        [self.personagem setFrame:CGRectMake(110, 190, self.startSize.width, self.startSize.height)];
-        self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
-        [self resetImagem];
-        self.vetoresCoordenadas.resetou = NO;
-    }
-    
+    //configurações de scrollview
     self.scroll.delegate = self;
     self.scroll.bounces = NO;
     self.scroll.bouncesZoom = NO;
-
+    
 }
+
 
 - (void) initZoom {
     float minZoom =self.scroll.bounds.size.height / self.contentView.image.size.height;
     if (minZoom > 1) return;
-    
-    //0.526236
     
     self.scroll.minimumZoomScale = minZoom;
     
@@ -178,15 +183,21 @@
 
 
 - (void)viewDidLayoutSubviews{
-    //ESSE TA CERTO CARAIOOO
+
     NSNumber *auxX, *auxY, *auxAng;
+    
+    self.sombra.backgroundColor = [UIColor redColor];
+    self.sombra2.backgroundColor = [UIColor greenColor];
+    self.sombra3.backgroundColor = [UIColor blueColor];
+    
+    NSLog(@"-------ORIGEM %d------", self.origem);
     
     if (self.resetou) {
         
-    
-    //--------------------------definição da matriz de jogo
+    //definição da matriz de jogo
     self.matrizX = [[NSMutableArray alloc] init];
     self.matrizY = [[NSMutableArray alloc] init];
+    self.vetorAnglo = [[NSMutableArray alloc] init];
     
     self.largura = self.areaJogo.frame.size.width;
     self.altura = self.areaJogo.frame.size.height;
@@ -204,7 +215,14 @@
         point = [NSNumber numberWithInt:b];
         [self.matrizY addObject:point];
     }
-    
+        
+    for (int z=0; z<=360; z+=20) {
+        point = [NSNumber numberWithFloat:z*M_PI/180];
+        [self.vetorAnglo addObject:point];
+    }
+        
+        
+    //definição matriz de sombra (menor para não bugar nas extremidades)
     self.matrizSombraX = [[NSMutableArray alloc] initWithArray:self.matrizX];
     self.matrizSombraY = [[NSMutableArray alloc] initWithArray:self.matrizY];
     
@@ -217,27 +235,146 @@
     
     NSInteger countX = [self.matrizSombraX count];
     NSInteger countY = [self.matrizSombraY count];
-    self.vetoresCoordenadas.sorteioAng = arc4random()%17;
-    if (self.vetoresCoordenadas.sorteioAng != 0 || self.vetoresCoordenadas.sorteioAng != 9)
-    {
-        self.sorteioX = arc4random()%(countX-1);
-        self.sorteioY = arc4random()%(countY-1);
-    }
-    else
-    {
-        self.sorteioX = arc4random()%countX;
-        self.sorteioY = arc4random()%countY;
-    }
+
+        
+        switch (self.origem) {
+                
+            case 0:
+                self.sorteioAng = arc4random()%17;
+                if (self.sorteioAng != 0 || self.sorteioAng != 9)
+                {
+                    self.sorteioX = arc4random()%(countX-1);
+                    self.sorteioY = arc4random()%(countY-1);
+                }
+                else
+                {
+                    self.sorteioX = arc4random()%countX;
+                    self.sorteioY = arc4random()%countY;
+                }
+                auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+                auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+                auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+                self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+                self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+                self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+                self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+                
+                break;
+                
+            case 1:
+                
+                self.sorteioAng = arc4random()%17;
+                if (self.sorteioAng != 0 || self.sorteioAng != 9)
+                {
+                    self.sorteioX = arc4random()%(countX-1);
+                    self.sorteioY = arc4random()%(countY-1);
+                }
+                else
+                {
+                    self.sorteioX = arc4random()%countX;
+                    self.sorteioY = arc4random()%countY;
+                }
+                auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+                auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+                auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+                self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+                self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+                self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+                self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+                
+                
+                
+                self.sorteioAng = arc4random()%17;
+                if (self.sorteioAng != 0 || self.sorteioAng != 9)
+                {
+                    self.sorteioX = arc4random()%(countX-1);
+                    self.sorteioY = arc4random()%(countY-1);
+                }
+                else
+                {
+                    self.sorteioX = arc4random()%countX;
+                    self.sorteioY = arc4random()%countY;
+                }
+                auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+                auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+                auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+                self.sombra2.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+                self.sombra2.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+                self.sombra2.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+                self.sombra2.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+                
+                NSLog (@"%d %d", [auxX integerValue] ,[auxY integerValue]);
+                
+                break;
+                
+            case 2:
+                
+                self.sorteioAng = arc4random()%17;
+                if (self.sorteioAng != 0 || self.sorteioAng != 9)
+                {
+                    self.sorteioX = arc4random()%(countX-1);
+                    self.sorteioY = arc4random()%(countY-1);
+                }
+                else
+                {
+                    self.sorteioX = arc4random()%countX;
+                    self.sorteioY = arc4random()%countY;
+                }
+                auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+                auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+                auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+                self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+                self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+                self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+                self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+                
+                
+                
+                self.sorteioAng = arc4random()%17;
+                if (self.sorteioAng != 0 || self.sorteioAng != 9)
+                {
+                    self.sorteioX = arc4random()%(countX-1);
+                    self.sorteioY = arc4random()%(countY-1);
+                }
+                else
+                {
+                    self.sorteioX = arc4random()%countX;
+                    self.sorteioY = arc4random()%countY;
+                }
+                auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+                auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+                auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+                self.sombra2.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+                self.sombra2.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+                self.sombra2.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+                self.sombra2.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+                
+                
+                
+                self.sorteioAng = arc4random()%17;
+                if (self.sorteioAng != 0 || self.sorteioAng != 9)
+                {
+                    self.sorteioX = arc4random()%(countX-1);
+                    self.sorteioY = arc4random()%(countY-1);
+                }
+                else
+                {
+                    self.sorteioX = arc4random()%countX;
+                    self.sorteioY = arc4random()%countY;
+                }
+                auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+                auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+                auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+                self.sombra3.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+                self.sombra3.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+                self.sombra3.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+                self.sombra3.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+                
+                
+                break;
+                
+        }
     
-    auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
-    auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
-    auxAng = [self.vetoresCoordenadas.angle objectAtIndex:self.vetoresCoordenadas.sorteioAng];
-    
-    
-    self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
-    self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
-    self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
-    self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
     
     
     //colocando personagem na matriz
@@ -256,21 +393,19 @@
         self.personagem.center = CGPointMake([auxX integerValue], [auxY integerValue]);
     }
     
+        //setando startPoint para reset
     self.startPoint = self.personagem.center;
         
         
     [self initZoom];
-        
-        [self.view insertSubview:self.base2 belowSubview:self.base1];
     
         
     }
     
+    //manter personagem sempre na mesma posição
     auxX = [self.matrizX objectAtIndex:self.i];
     auxY = [self.matrizY objectAtIndex:self.j];
     self.personagem.center = CGPointMake([auxX integerValue], [auxY integerValue]);
-    
-    NSLog (@"ENTROOU");
     
 
 }
@@ -330,7 +465,6 @@
         [self.personagem setBounds:CGRectMake(0, 0,
                                          self.startSize.width, self.startSize.height)];
         
-        [self.objetoContadorEsquerda maisUm];
     }
     
     [self verificarEncaixe];
@@ -339,7 +473,6 @@
 - (IBAction)rotacaoHorario:(id)sender{
     self.anglo = self.anglo + .34906585;
     self.personagem.transform = CGAffineTransformMakeRotation(self.anglo);
-    [self.objetoContadorAngle maisVinte];
     
     [self verificarEncaixe];
 }
@@ -347,7 +480,6 @@
 - (IBAction)rotacaoAntiHorario:(id)sender{
     self.anglo = self.anglo - .34906585;
     self.personagem.transform = CGAffineTransformMakeRotation(self.anglo);
-    [self.objetoContadorAngle menosVinte];
     
     [self verificarEncaixe];
 }
@@ -430,33 +562,147 @@
     
     NSInteger countX = [self.matrizSombraX count];
     NSInteger countY = [self.matrizSombraY count];
-    self.vetoresCoordenadas.sorteioAng = arc4random()%17;
-    if (self.vetoresCoordenadas.sorteioAng != 0 || self.vetoresCoordenadas.sorteioAng != 9)
-    {
-        self.sorteioX = arc4random()%(countX-1);
-        self.sorteioY = arc4random()%(countY-1);
-    }
-    else
-    {
-        self.sorteioX = arc4random()%countX;
-        self.sorteioY = arc4random()%countY;
-    }
-    
     NSNumber *auxX, *auxY, *auxAng;
-    auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
-    auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
-    auxAng = [self.vetoresCoordenadas.angle objectAtIndex:self.vetoresCoordenadas.sorteioAng];
     
-    self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
-    self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
-    self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
-    self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+    switch (self.origem) {
+            
+        case 0:
+            self.sorteioAng = arc4random()%17;
+            if (self.sorteioAng != 0 || self.sorteioAng != 9)
+            {
+                self.sorteioX = arc4random()%(countX-1);
+                self.sorteioY = arc4random()%(countY-1);
+            }
+            else
+            {
+                self.sorteioX = arc4random()%countX;
+                self.sorteioY = arc4random()%countY;
+            }
+            auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+            auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+            auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+            self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+            self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+            self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+            self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+            
+            break;
+            
+        case 1:
+            
+            self.sorteioAng = arc4random()%17;
+            if (self.sorteioAng != 0 || self.sorteioAng != 9)
+            {
+                self.sorteioX = arc4random()%(countX-1);
+                self.sorteioY = arc4random()%(countY-1);
+            }
+            else
+            {
+                self.sorteioX = arc4random()%countX;
+                self.sorteioY = arc4random()%countY;
+            }
+            auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+            auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+            auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+            self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+            self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+            self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+            self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+            
+            
+            
+            self.sorteioAng = arc4random()%17;
+            if (self.sorteioAng != 0 || self.sorteioAng != 9)
+            {
+                self.sorteioX = arc4random()%(countX-1);
+                self.sorteioY = arc4random()%(countY-1);
+            }
+            else
+            {
+                self.sorteioX = arc4random()%countX;
+                self.sorteioY = arc4random()%countY;
+            }
+            auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+            auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+            auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+            self.sombra2.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+            self.sombra2.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+            self.sombra2.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+            self.sombra2.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+            
+            break;
+            
+        case 2:
+            
+            self.sorteioAng = arc4random()%17;
+            if (self.sorteioAng != 0 || self.sorteioAng != 9)
+            {
+                self.sorteioX = arc4random()%(countX-1);
+                self.sorteioY = arc4random()%(countY-1);
+            }
+            else
+            {
+                self.sorteioX = arc4random()%countX;
+                self.sorteioY = arc4random()%countY;
+            }
+            auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+            auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+            auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+            self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+            self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+            self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+            self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+            
+            
+            
+            self.sorteioAng = arc4random()%17;
+            if (self.sorteioAng != 0 || self.sorteioAng != 9)
+            {
+                self.sorteioX = arc4random()%(countX-1);
+                self.sorteioY = arc4random()%(countY-1);
+            }
+            else
+            {
+                self.sorteioX = arc4random()%countX;
+                self.sorteioY = arc4random()%countY;
+            }
+            auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+            auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+            auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+            self.sombra2.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+            self.sombra2.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+            self.sombra2.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+            self.sombra2.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+            
+            
+            
+            self.sorteioAng = arc4random()%17;
+            if (self.sorteioAng != 0 || self.sorteioAng != 9)
+            {
+                self.sorteioX = arc4random()%(countX-1);
+                self.sorteioY = arc4random()%(countY-1);
+            }
+            else
+            {
+                self.sorteioX = arc4random()%countX;
+                self.sorteioY = arc4random()%countY;
+            }
+            auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+            auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+            auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+            self.sombra3.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+            self.sombra3.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+            self.sombra3.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+            self.sombra3.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+            
+            
+            break;
+            
+    }
     
     self.anglo = 0;
     self.personagem.transform = CGAffineTransformMakeRotation(self.anglo);
     [self.personagem setCenter:CGPointMake(self.startPoint.x, self.startPoint.y)];
-    self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
-    self.vetoresCoordenadas.resetou = NO;
     
     NSNumber *origemX = [NSNumber numberWithFloat: self.personagem.center.x];
     NSNumber *origemY = [NSNumber numberWithFloat: self.personagem.center.y];
@@ -492,12 +738,27 @@
 - (void) resetImagem {
     
     NSInteger sorteioPersonagem = arc4random()%3;
-    while (self.sorteado == sorteioPersonagem){
+    
+    while (self.sorteado == sorteioPersonagem)
+    {
         sorteioPersonagem = arc4random()%3;
     }
-    self.sombra.image = [self.sombras objectAtIndex:sorteioPersonagem];
+    
+    switch (self.origem){
+        case 0:
+            self.sombra.image = [self.sombras objectAtIndex:sorteioPersonagem];
+        case 1:
+            self.sombra.image = [self.sombras objectAtIndex:sorteioPersonagem];
+            self.sombra2.image = [self.sombras objectAtIndex:sorteioPersonagem];
+        case 2:
+            self.sombra.image = [self.sombras objectAtIndex:sorteioPersonagem];
+            self.sombra2.image = [self.sombras objectAtIndex:sorteioPersonagem];
+            self.sombra3.image = [self.sombras objectAtIndex:sorteioPersonagem];
+            break;
+    }
     self.personagem.image = [self.imagens objectAtIndex:sorteioPersonagem];
     self.sorteado = sorteioPersonagem;
+    
 }
 
 - (NSUInteger)supportedInterfaceOrientations{

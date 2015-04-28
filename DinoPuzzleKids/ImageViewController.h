@@ -12,10 +12,6 @@
 
 @interface ImageViewController : UIViewController <AVAudioPlayerDelegate>
 
-@property (nonatomic) IBOutlet UIView *viewAlert;
-@property (weak, nonatomic) IBOutlet UIButton *btnOK;
-@property (weak, nonatomic) IBOutlet UIButton *btnEstatisticas;
-
 @property (weak, nonatomic) IBOutlet UIButton *btnCima;
 @property (weak, nonatomic) IBOutlet UIButton *btnBaixo;
 @property (weak, nonatomic) IBOutlet UIButton *btnEsq;
@@ -29,5 +25,6 @@
 @property (nonatomic) NSMutableArray *sombras;
 
 @property (nonatomic)BOOL resetou;
+@property (nonatomic)int origem;
 
 @end

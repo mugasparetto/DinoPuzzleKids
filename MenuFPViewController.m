@@ -1,26 +1,22 @@
 //
-//  InicioViewController.m
-//  TesteImagemBotoes
+//  MenuFPViewController.m
+//  DinoPuzzleKids
 //
-//  Created by Murilo Gasparetto on 23/04/15.
+//  Created by Murilo Gasparetto on 28/04/15.
 //  Copyright (c) 2015 Murilo Gasparetto. All rights reserved.
 //
 
-#import "InicioViewController.h"
+#import "MenuFPViewController.h"
 #import "ImageViewController.h"
-#import <AVFoundation/AVFoundation.h>
 
-@interface InicioViewController ()
-{
-    AVAudioPlayer *background;
-}
+@interface MenuFPViewController ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *bg;
 @property (weak, nonatomic) IBOutlet UIImageView *logo;
 
 @end
 
-@implementation InicioViewController
+@implementation MenuFPViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,14 +25,6 @@
     self.bg.image = [UIImage imageNamed:@"tela_inicio.png"];
     self.logo.image = [UIImage imageNamed:@"logo 4.png"];
     
-//    NSString *path;
-//    NSURL *soundUrl;
-//    
-//    path = [NSString stringWithFormat:@"%@/background.mp3", [[NSBundle mainBundle] resourcePath]];
-//    soundUrl = [NSURL fileURLWithPath:path];
-//    background = [[AVAudioPlayer alloc] initWithContentsOfURL:soundUrl error:nil];
-//    background.numberOfLoops = -1;
-//    [background play];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -47,24 +35,41 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-
+    
 }
 
-- (IBAction)nextView:(id)sender
+- (IBAction)easyView:(id)sender
 {
     
-    ImageViewController *jogo = [[ImageViewController alloc] initWithNibName:nil bundle:nil];
-    [self.navigationController pushViewController:jogo animated:NO];
+    ImageViewController *easy = [[ImageViewController alloc] initWithNibName:nil bundle:nil];
+    easy.origem = 0;
+    [self.navigationController pushViewController:easy animated:NO];
     
 }
 
-- (void) stopBackground {
-    [background stop];
+- (IBAction)mediumView:(id)sender
+{
+    
+    ImageViewController *medium = [[ImageViewController alloc] initWithNibName:nil bundle:nil];
+    medium.origem = 1;
+    [self.navigationController pushViewController:medium animated:NO];
+    
 }
+
+- (IBAction)hardView:(id)sender
+{
+    
+    ImageViewController *hard = [[ImageViewController alloc] initWithNibName:nil bundle:nil];
+    hard.origem = 2;
+    [self.navigationController pushViewController:hard animated:NO];
+    
+}
+
 
 - (NSUInteger)supportedInterfaceOrientations{
     return UIInterfaceOrientationMaskPortrait;
 }
+
 
 /*
 #pragma mark - Navigation

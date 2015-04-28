@@ -10,6 +10,5 @@
 
 @interface InicioViewController : UIViewController
 
-- (void)stopBackground;
 
 @end
