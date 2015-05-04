@@ -186,9 +186,9 @@
 
     NSNumber *auxX, *auxY, *auxAng;
     
-    self.sombra.backgroundColor = [UIColor redColor];
-    self.sombra2.backgroundColor = [UIColor greenColor];
-    self.sombra3.backgroundColor = [UIColor blueColor];
+//    self.sombra.backgroundColor = [UIColor redColor];
+//    self.sombra2.backgroundColor = [UIColor greenColor];
+//    self.sombra3.backgroundColor = [UIColor blueColor];
     
     NSLog(@"-------ORIGEM %d------", self.origem);
     
@@ -235,7 +235,6 @@
     
     NSInteger countX = [self.matrizSombraX count];
     NSInteger countY = [self.matrizSombraY count];
-
         
         switch (self.origem) {
                 
@@ -263,47 +262,7 @@
                 
             case 1:
                 
-                self.sorteioAng = arc4random()%17;
-                if (self.sorteioAng != 0 || self.sorteioAng != 9)
-                {
-                    self.sorteioX = arc4random()%(countX-1);
-                    self.sorteioY = arc4random()%(countY-1);
-                }
-                else
-                {
-                    self.sorteioX = arc4random()%countX;
-                    self.sorteioY = arc4random()%countY;
-                }
-                auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
-                auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
-                auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
-                self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
-                self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
-                self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
-                self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
-                
-                
-                
-                self.sorteioAng = arc4random()%17;
-                if (self.sorteioAng != 0 || self.sorteioAng != 9)
-                {
-                    self.sorteioX = arc4random()%(countX-1);
-                    self.sorteioY = arc4random()%(countY-1);
-                }
-                else
-                {
-                    self.sorteioX = arc4random()%countX;
-                    self.sorteioY = arc4random()%countY;
-                }
-                auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
-                auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
-                auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
-                self.sombra2.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
-                self.sombra2.center = CGPointMake([auxX integerValue],[auxY integerValue]);
-                self.sombra2.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
-                self.sombra2.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
-                
-                NSLog (@"%d %d", [auxX integerValue] ,[auxY integerValue]);
+                [self sorteioSombra2];
                 
                 break;
                 
@@ -406,7 +365,6 @@
     auxX = [self.matrizX objectAtIndex:self.i];
     auxY = [self.matrizY objectAtIndex:self.j];
     self.personagem.center = CGPointMake([auxX integerValue], [auxY integerValue]);
-    
 
 }
 
@@ -590,45 +548,7 @@
             
         case 1:
             
-            self.sorteioAng = arc4random()%17;
-            if (self.sorteioAng != 0 || self.sorteioAng != 9)
-            {
-                self.sorteioX = arc4random()%(countX-1);
-                self.sorteioY = arc4random()%(countY-1);
-            }
-            else
-            {
-                self.sorteioX = arc4random()%countX;
-                self.sorteioY = arc4random()%countY;
-            }
-            auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
-            auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
-            auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
-            self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
-            self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
-            self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
-            self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
-            
-            
-            
-            self.sorteioAng = arc4random()%17;
-            if (self.sorteioAng != 0 || self.sorteioAng != 9)
-            {
-                self.sorteioX = arc4random()%(countX-1);
-                self.sorteioY = arc4random()%(countY-1);
-            }
-            else
-            {
-                self.sorteioX = arc4random()%countX;
-                self.sorteioY = arc4random()%countY;
-            }
-            auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
-            auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
-            auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
-            self.sombra2.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
-            self.sombra2.center = CGPointMake([auxX integerValue],[auxY integerValue]);
-            self.sombra2.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
-            self.sombra2.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+            [self sorteioSombra2];
             
             break;
             
@@ -738,18 +658,35 @@
 - (void) resetImagem {
     
     NSInteger sorteioPersonagem = arc4random()%3;
+    int sombra2 = 0;
     
     while (self.sorteado == sorteioPersonagem)
     {
         sorteioPersonagem = arc4random()%3;
     }
     
+    switch (sorteioPersonagem) {
+        case 0:
+            sombra2 = 1;
+            break;
+            
+        case 1:
+            sombra2 = 2;
+            break;
+            
+        case 2:
+            sombra2 = 0;
+            break;
+    }
+    
     switch (self.origem){
         case 0:
             self.sombra.image = [self.sombras objectAtIndex:sorteioPersonagem];
+            break;
         case 1:
             self.sombra.image = [self.sombras objectAtIndex:sorteioPersonagem];
-            self.sombra2.image = [self.sombras objectAtIndex:sorteioPersonagem];
+            self.sombra2.image = [self.sombras objectAtIndex: sombra2];
+            break;
         case 2:
             self.sombra.image = [self.sombras objectAtIndex:sorteioPersonagem];
             self.sombra2.image = [self.sombras objectAtIndex:sorteioPersonagem];
@@ -760,6 +697,110 @@
     self.sorteado = sorteioPersonagem;
     
 }
+
+
+
+- (void) sorteioSombra2 {
+    
+    NSInteger countX = [self.matrizSombraX count];
+    NSInteger countY = [self.matrizSombraY count];
+    NSNumber *auxX, *auxY, *auxAng;
+    
+    
+    self.sorteioAng = arc4random()%17;
+    if (self.sorteioAng != 0 || self.sorteioAng != 9)
+    {
+        self.sorteioX = arc4random()%(countX-1);
+        self.sorteioY = arc4random()%(countY-1);
+    }
+    else
+    {
+        self.sorteioX = arc4random()%countX;
+        self.sorteioY = arc4random()%countY;
+    }
+    
+    auxX = [self.matrizSombraX objectAtIndex:self.sorteioX];
+    auxY = [self.matrizSombraY objectAtIndex:self.sorteioY];
+    auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+    self.sombra.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+    self.sombra.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+    self.sombra.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+    self.sombra.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+    
+    
+    NSInteger sorteioSombra2X, sorteioSombra2Y;
+    int range = [self range];
+    
+    if (self.sorteioX >= 0 && self.sorteioX< countX/2) {
+        
+        if (self.sorteioY >= 0 && self.sorteioY < countY/2) {
+            NSLog(@"Segundo Quadrante");
+            sorteioSombra2X = countX -1 - arc4random_uniform(range);//ta dando problema
+            sorteioSombra2Y = countY -1 - arc4random_uniform(range);
+            NSLog(@"X: %ld", (long)sorteioSombra2X);
+            NSLog(@"Y: %ld", (long)sorteioSombra2Y);
+            NSLog(@"%d", range);
+            
+        }
+        else {
+            NSLog(@"Terceiro Quadrante");
+            sorteioSombra2X = countX -1 - arc4random_uniform(range);
+            sorteioSombra2Y = arc4random_uniform(range);
+            NSLog(@"X: %ld", (long)sorteioSombra2X);
+            NSLog(@"Y: %ld", (long)sorteioSombra2Y);
+            NSLog(@"%d", range);
+        }
+        
+    }
+    
+    else {
+        
+        if (self.sorteioY >= 0 && self.sorteioY < countY/2) {
+            NSLog(@"Primeiro Quadrante");
+            sorteioSombra2X = arc4random_uniform(range);
+            sorteioSombra2Y = countY -1 - arc4random_uniform(range);
+            NSLog(@"X: %ld", (long)sorteioSombra2X);
+            NSLog(@"Y: %ld", (long)sorteioSombra2Y);
+            NSLog(@"%d", range);
+        }
+        
+        else {
+            
+            NSLog(@"Quarto Quadrante");
+            sorteioSombra2X = arc4random_uniform(range);
+            sorteioSombra2Y = arc4random_uniform(range);
+            NSLog(@"X: %ld", (long)sorteioSombra2X);
+            NSLog(@"Y: %ld", (long)sorteioSombra2Y);
+            NSLog(@"%d", range);
+        }
+    }
+    
+    
+    self.sorteioAng = arc4random()%17;
+    auxX = [self.matrizSombraX objectAtIndex:sorteioSombra2X];
+    auxY = [self.matrizSombraY objectAtIndex:sorteioSombra2Y];
+    auxAng = [self.vetorAnglo objectAtIndex:self.sorteioAng];
+    self.sombra2.frame = CGRectMake ([auxX integerValue],[auxY integerValue],100,127);
+    self.sombra2.center = CGPointMake([auxX integerValue],[auxY integerValue]);
+    
+    self.sombra2.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
+    self.sombra2.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
+    
+    
+}
+
+- (int) range {
+    int altura = (int)self.altura;
+    switch (altura) {
+        case 262: return 1; break;
+        case 350: return 2; break;
+        case 449: return 3; break;
+        case 518: return 5; break;
+    }
+    return 0;
+}
+
+
 
 - (NSUInteger)supportedInterfaceOrientations{
     return UIInterfaceOrientationMaskPortrait;
