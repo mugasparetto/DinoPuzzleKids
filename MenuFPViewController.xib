@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MenuFPViewController">
@@ -16,14 +17,20 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Lg-uA-TZP">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Lg-uA-TZP">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="urV-tg-hj4">
-                    <rect key="frame" x="40" y="51" width="240" height="204"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="urV-tg-hj4">
+                    <rect key="frame" x="40" y="30" width="240" height="204"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="urV-tg-hj4" secondAttribute="height" multiplier="20:17" id="dFW-YX-efg"/>
+                    </constraints>
                 </imageView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ElM-FS-QHZ">
-                    <rect key="frame" x="60" y="311" width="200" height="59"/>
+                <view alpha="0.34999999999999964" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="ydz-Ks-oGT">
+                    <rect key="frame" x="0.0" y="248" width="320" height="297"/>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ElM-FS-QHZ">
+                    <rect key="frame" x="60" y="300" width="200" height="59"/>
                     <state key="normal" title="EASY" backgroundImage="Grande play .png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -31,8 +38,8 @@
                         <action selector="easyView:" destination="-1" eventType="touchUpInside" id="zYa-9S-dwl"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xrI-ai-a2t">
-                    <rect key="frame" x="60" y="378" width="200" height="59"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xrI-ai-a2t">
+                    <rect key="frame" x="60" y="367" width="200" height="59"/>
                     <state key="normal" title="MEDIUM" backgroundImage="Grande play .png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -40,8 +47,8 @@
                         <action selector="mediumView:" destination="-1" eventType="touchUpInside" id="V0M-nE-9mz"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="19W-dE-sA4">
-                    <rect key="frame" x="60" y="445" width="200" height="59"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="19W-dE-sA4">
+                    <rect key="frame" x="60" y="434" width="200" height="59"/>
                     <state key="normal" title="HARD" backgroundImage="Grande play .png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -51,6 +58,25 @@
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="1Lg-uA-TZP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="77Q-1x-Wro"/>
+                <constraint firstItem="1Lg-uA-TZP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="BRA-WG-WKm"/>
+                <constraint firstItem="ydz-Ks-oGT" firstAttribute="centerY" secondItem="xrI-ai-a2t" secondAttribute="centerY" id="Bwf-T1-zzt"/>
+                <constraint firstAttribute="trailing" secondItem="ydz-Ks-oGT" secondAttribute="trailing" id="Crz-9O-RGA"/>
+                <constraint firstItem="urV-tg-hj4" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="30" id="G6b-DQ-tq1"/>
+                <constraint firstItem="ElM-FS-QHZ" firstAttribute="centerX" secondItem="19W-dE-sA4" secondAttribute="centerX" id="K4M-i7-1hQ"/>
+                <constraint firstAttribute="trailing" secondItem="1Lg-uA-TZP" secondAttribute="trailing" id="O6R-xr-uKj"/>
+                <constraint firstItem="urV-tg-hj4" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="40" id="TD2-Yb-VBd"/>
+                <constraint firstItem="ydz-Ks-oGT" firstAttribute="top" secondItem="urV-tg-hj4" secondAttribute="bottom" constant="14" id="Wfk-S5-EBz"/>
+                <constraint firstItem="ydz-Ks-oGT" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="XSH-6j-hPR"/>
+                <constraint firstItem="ElM-FS-QHZ" firstAttribute="centerX" secondItem="xrI-ai-a2t" secondAttribute="centerX" id="atj-nt-7WR"/>
+                <constraint firstItem="19W-dE-sA4" firstAttribute="top" secondItem="xrI-ai-a2t" secondAttribute="bottom" constant="8" id="bbl-Bo-xuc"/>
+                <constraint firstItem="xrI-ai-a2t" firstAttribute="top" secondItem="ElM-FS-QHZ" secondAttribute="bottom" constant="8" id="eal-pT-i54"/>
+                <constraint firstItem="ydz-Ks-oGT" firstAttribute="centerX" secondItem="xrI-ai-a2t" secondAttribute="centerX" id="jVX-hz-O0B"/>
+                <constraint firstAttribute="trailing" secondItem="urV-tg-hj4" secondAttribute="trailing" constant="40" id="kCO-Ma-znc"/>
+                <constraint firstAttribute="bottom" secondItem="1Lg-uA-TZP" secondAttribute="bottom" id="s4W-My-Oyc"/>
+                <constraint firstAttribute="bottom" secondItem="ydz-Ks-oGT" secondAttribute="bottom" constant="23" id="wW3-Ho-aUu"/>
+            </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <point key="canvasLocation" x="280" y="252"/>
         </view>

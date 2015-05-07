@@ -22,13 +22,16 @@
                     <color key="backgroundColor" red="0.98431372549999996" green="0.18039215689999999" blue="0.031372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sWz-CN-IhO">
-                    <rect key="frame" x="40" y="51" width="240" height="204"/>
+                    <rect key="frame" x="40" y="30" width="240" height="204"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="sWz-CN-IhO" secondAttribute="height" multiplier="20:17" id="FOI-TY-SBA"/>
                     </constraints>
                 </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EC1-uk-ofM">
+                    <rect key="frame" x="0.0" y="248" width="320" height="297"/>
+                </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HqA-8J-JeH">
-                    <rect key="frame" x="60" y="362" width="200" height="59"/>
+                    <rect key="frame" x="60" y="367" width="200" height="59"/>
                     <state key="normal" backgroundImage="Grande play .png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -39,15 +42,19 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="sWz-CN-IhO" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="51" id="Dh0-Sk-d1B"/>
+                <constraint firstItem="EC1-uk-ofM" firstAttribute="centerX" secondItem="HqA-8J-JeH" secondAttribute="centerX" id="AqI-Xq-vkw"/>
+                <constraint firstItem="EC1-uk-ofM" firstAttribute="centerY" secondItem="HqA-8J-JeH" secondAttribute="centerY" id="Cu9-dG-KY7"/>
+                <constraint firstItem="sWz-CN-IhO" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="30" id="Dh0-Sk-d1B"/>
+                <constraint firstItem="EC1-uk-ofM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="NIB-sm-y1i"/>
                 <constraint firstItem="sWz-CN-IhO" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="40" id="RW4-WX-ZfY"/>
                 <constraint firstAttribute="trailing" secondItem="sWz-CN-IhO" secondAttribute="trailing" constant="40" id="Rp5-cu-9Uq"/>
-                <constraint firstAttribute="centerX" secondItem="HqA-8J-JeH" secondAttribute="centerX" id="RsK-np-Kfb"/>
+                <constraint firstItem="EC1-uk-ofM" firstAttribute="top" secondItem="sWz-CN-IhO" secondAttribute="bottom" constant="14" id="aSr-MN-dS3"/>
                 <constraint firstItem="uzU-yb-RSU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="dYF-Ti-4r1"/>
+                <constraint firstAttribute="bottom" secondItem="EC1-uk-ofM" secondAttribute="bottom" constant="23" id="oLK-eS-Xgk"/>
                 <constraint firstItem="uzU-yb-RSU" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="oqk-hp-nhX"/>
+                <constraint firstAttribute="trailing" secondItem="EC1-uk-ofM" secondAttribute="trailing" id="pvK-tf-ORQ"/>
                 <constraint firstAttribute="trailing" secondItem="uzU-yb-RSU" secondAttribute="trailing" id="q8s-Wy-4tl"/>
                 <constraint firstAttribute="bottom" secondItem="uzU-yb-RSU" secondAttribute="bottom" id="wPu-eJ-1pM"/>
-                <constraint firstItem="HqA-8J-JeH" firstAttribute="top" secondItem="sWz-CN-IhO" secondAttribute="bottom" constant="107" id="wpS-Zi-PU0"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <point key="canvasLocation" x="275" y="248"/>
