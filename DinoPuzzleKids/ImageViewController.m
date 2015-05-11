@@ -9,6 +9,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import "ImageViewController.h"
+#import "Settings.h"
+#import "AppDelegate.h"
+
 
 @interface ImageViewController () <UIScrollViewDelegate>
 
@@ -17,6 +20,8 @@
     AVAudioPlayer *encaixou;
     int _startMusica;
 }
+
+@property (nonatomic) AppDelegate *delegate;
 
 @property (weak, nonatomic) IBOutlet UIImageView *contentView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scroll;
@@ -86,9 +91,13 @@
     //pontuação
     self.pont = 0;
     
+    //alocando app deledagte para usar backgroudsound
+    self.delegate = ( AppDelegate* )[UIApplication sharedApplication].delegate;
+    
     //alocando vetores de personagens e sombras
     self.sombras = [[NSMutableArray alloc] init];
     self.imagens = [[NSMutableArray alloc] init];
+    self.sombrasErradas = [[NSMutableArray alloc] init];
     
     //label da pontuação
     [self.score setFont:[UIFont fontWithName:@"foo" size:30]];
@@ -102,6 +111,10 @@
     [self.imagens addObject:[UIImage imageNamed:@"dino1.png"]];
     [self.imagens addObject:[UIImage imageNamed:@"dino2.png"]];
     [self.imagens addObject:[UIImage imageNamed:@"dino3.png"]];
+    [self.sombrasErradas addObject:[UIImage imageNamed:@"sombra_errada_dino1.png"]];
+    [self.sombrasErradas addObject:[UIImage imageNamed:@"sombra_errada_dino2.png"]];
+    [self.sombrasErradas addObject:[UIImage imageNamed:@"sombra_errada_dino3.png"]];
+
     
     //setando start size, para corrigir bug ao rotacionar
     self.startSize = self.personagem.frame.size;
@@ -124,7 +137,6 @@
         case 0:
             [self.view insertSubview:self.sombra belowSubview:self.personagem];
             break;
-            
         case 1:
             [self.view insertSubview:self.sombra belowSubview:self.personagem];
             [self.view insertSubview:self.sombra2 belowSubview:self.personagem];
@@ -136,8 +148,6 @@
             [self.view insertSubview:self.sombra3 belowSubview:self.personagem];
             break;
     }
-    
-    
 
     //configuracões de som
     NSString *path;
@@ -148,13 +158,17 @@
     background = [[AVAudioPlayer alloc] initWithContentsOfURL:soundUrl error:nil];
     background.numberOfLoops = -1;
     [background setVolume:0.1];
-    [background play];
+//    [background play];
     
     path = [NSString stringWithFormat:@"%@/encaixe.mp3", [[NSBundle mainBundle] resourcePath]];
     soundUrl = [NSURL fileURLWithPath:path];
     encaixou = [[AVAudioPlayer alloc] initWithContentsOfURL:soundUrl error:nil];
     [encaixou setDelegate:self];
     encaixou.numberOfLoops = 0;
+    
+    if (![Settings getBoolForKey:@"settingsPlayBackgroundMusic"]) {
+        [self.btnPlay setSelected:YES];
+    }
     
 
     //property que impede entrar em didLayoutSubviews
@@ -268,6 +282,10 @@
                 
             case 2:
                 
+                [self sorteioSombra2];
+                
+                break;
+                /*
                 self.sorteioAng = arc4random()%17;
                 if (self.sorteioAng != 0 || self.sorteioAng != 9)
                 {
@@ -331,10 +349,9 @@
                 
                 
                 break;
+                 */
                 
         }
-    
-    
     
     //colocando personagem na matriz
     if (countX%2 == 0){
@@ -365,6 +382,7 @@
     auxX = [self.matrizX objectAtIndex:self.i];
     auxY = [self.matrizY objectAtIndex:self.j];
     self.personagem.center = CGPointMake([auxX integerValue], [auxY integerValue]);
+    self.resetou = NO;
 
 }
 
@@ -447,7 +465,9 @@
     int aux = 1;
     
     if ([sender isSelected]) {
-        [background play];
+        [_delegate.background play];
+        [Settings setBoolForKey:@"settingsPlayBackgroundMusic" value:YES];
+//        [background play];
         aux = 1;
 //        UIImage *unselectedImage = [UIImage imageNamed:@"volume_on.png"];
 //        [sender setBackgroundImage:unselectedImage forState:UIControlStateNormal];
@@ -455,12 +475,15 @@
     }
     
     else{
-        [background stop];
+        [_delegate.background stop];
+        [Settings setBoolForKey:@"settingsPlayBackgroundMusic" value:NO];
+//        [background stop];
         aux = 0;
         //UIImage *selectedImage = [UIImage imageNamed:@"volume_off.png"];
         //[sender setBackgroundImage:selectedImage forState:UIControlStateSelected];
         [sender setSelected:YES];
     }
+    
     _startMusica = aux;
     self.resetou = NO;
 
@@ -470,6 +493,10 @@
 - (IBAction)btnReset:(id)sender{
     //self.resetou = YES;
     [self reset];
+}
+
+- (IBAction)btnVoltar:(id)sender{
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void) verificarEncaixe {
@@ -554,6 +581,11 @@
             
         case 2:
             
+            [self sorteioSombra2];
+            
+            break;
+
+            /*
             self.sorteioAng = arc4random()%17;
             if (self.sorteioAng != 0 || self.sorteioAng != 9)
             {
@@ -614,9 +646,7 @@
             self.sombra3.center = CGPointMake([auxX integerValue],[auxY integerValue]);
             self.sombra3.transform = CGAffineTransformMakeRotation([auxAng floatValue]);
             self.sombra3.bounds = CGRectMake(0, 0, self.startSize.width, self.startSize.height);
-            
-            
-            break;
+            */
             
     }
     
@@ -689,15 +719,15 @@
             break;
         case 2:
             self.sombra.image = [self.sombras objectAtIndex:sorteioPersonagem];
-            self.sombra2.image = [self.sombras objectAtIndex:sorteioPersonagem];
-            self.sombra3.image = [self.sombras objectAtIndex:sorteioPersonagem];
+            self.sombra2.image = [self.sombrasErradas objectAtIndex:sorteioPersonagem];
+//            self.sombra3.image = [self.sombras objectAtIndex: sombra2];
+//            self.sombra3.image = [self.sombras objectAtIndex:sorteioPersonagem];
             break;
     }
     self.personagem.image = [self.imagens objectAtIndex:sorteioPersonagem];
     self.sorteado = sorteioPersonagem;
     
 }
-
 
 
 - (void) sorteioSombra2 {

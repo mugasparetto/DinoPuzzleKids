@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -30,8 +31,8 @@
                     <rect key="frame" x="0.0" y="248" width="320" height="297"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ElM-FS-QHZ">
-                    <rect key="frame" x="60" y="300" width="200" height="59"/>
-                    <state key="normal" title="EASY" backgroundImage="Grande play .png">
+                    <rect key="frame" x="42" y="299" width="235" height="60"/>
+                    <state key="normal" backgroundImage="Easy.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -39,8 +40,8 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xrI-ai-a2t">
-                    <rect key="frame" x="60" y="367" width="200" height="59"/>
-                    <state key="normal" title="MEDIUM" backgroundImage="Grande play .png">
+                    <rect key="frame" x="42" y="367" width="235" height="60"/>
+                    <state key="normal" backgroundImage="Medium.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -48,8 +49,8 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="19W-dE-sA4">
-                    <rect key="frame" x="60" y="434" width="200" height="59"/>
-                    <state key="normal" title="HARD" backgroundImage="Grande play .png">
+                    <rect key="frame" x="42" y="435" width="235" height="60"/>
+                    <state key="normal" backgroundImage="Hard.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -82,7 +83,9 @@
         </view>
     </objects>
     <resources>
-        <image name="Grande play .png" width="200" height="59"/>
+        <image name="Easy.png" width="235" height="60"/>
+        <image name="Hard.png" width="235" height="60"/>
+        <image name="Medium.png" width="235" height="60"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

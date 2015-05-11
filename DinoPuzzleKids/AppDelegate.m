@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "ImageViewController.h"
 #import "InicioViewController.h"
+#import "Settings.h"
+
 
 @interface AppDelegate ()
 
@@ -18,6 +20,18 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    //Inicia musica de fundo
+    NSString *path = [NSString stringWithFormat:@"%@/background.mp3", [[NSBundle mainBundle] resourcePath]];
+    NSURL *soundUrl = [NSURL fileURLWithPath:path];
+    _background = [[AVAudioPlayer alloc] initWithContentsOfURL:soundUrl error:nil];
+    _background.numberOfLoops = -1;
+    [_background setVolume:0.1];
+    
+    if ([Settings getBoolForKey:@"settingsPlayBackgroundMusic"]) {
+        [_background play];
+    }
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     

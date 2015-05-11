@@ -8,11 +8,13 @@
 
 #import "MenuFPViewController.h"
 #import "ImageViewController.h"
+#import "AppDelegate.h"
 
 @interface MenuFPViewController ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *bg;
 @property (weak, nonatomic) IBOutlet UIImageView *logo;
+@property (nonatomic) AppDelegate *delegate;
 
 @end
 
@@ -21,6 +23,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    self.delegate = ( AppDelegate* )[UIApplication sharedApplication].delegate;
     
     self.bg.image = [UIImage imageNamed:@"tela_inicio.png"];
     self.logo.image = [UIImage imageNamed:@"logo 4.png"];

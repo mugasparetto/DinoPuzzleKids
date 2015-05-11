@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "Settings.h"
 
 
 @interface ImageViewController : UIViewController <AVAudioPlayerDelegate>
@@ -18,11 +19,16 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnDir;
 @property (weak, nonatomic) IBOutlet UIButton *btnAngloEsq;
 @property (weak, nonatomic) IBOutlet UIButton *btnAngloDir;
+@property (weak, nonatomic) IBOutlet UIButton *btnPlay;
+@property (weak, nonatomic) IBOutlet UIButton *btnVoltar;
+
 
 @property (weak, nonatomic) IBOutlet UIButton *btnReset;
 
 @property (nonatomic) NSMutableArray *imagens;
 @property (nonatomic) NSMutableArray *sombras;
+@property (nonatomic) NSMutableArray *sombrasErradas;
+
 
 @property (nonatomic)BOOL resetou;
 @property (nonatomic)int origem;
